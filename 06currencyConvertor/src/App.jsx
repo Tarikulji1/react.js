@@ -1,29 +1,27 @@
 import { useState } from 'react'
-import {InputBox} from './components'
+import InputBox from './components/InputBox'
 import useCurrencyInfo from './hooks/useCurrencyInfo'
 
 
 
 function App() {
-  const [amount, setAmount] = useState(0)
-  const [from, setFrom] = useState("usd")
-  const [to, setTo] = useState("inr")
-  const [convertedAmount, setConvertedAmount] = useState(0)
-
-  const currencyInfo = useCurrencyInfo(from)
-
-  const options = Object.keys(currencyInfo)
+  const [amount, setAmount] = useState(0);
+  const [from, setFrom] = useState("usd");
+  const [to, setTo] = useState("inr");
+  const [convertedAmount, setConvertedAmount] = useState(0);
+  const currencyInfo = useCurrencyInfo(from);
+  const options = Object.keys(currencyInfo);
 
   const swap = () => {
-    setFrom(to)
-    setTo(from)
-    setConvertedAmount(amount)
-    setAmount(convertedAmount)
-  }
+    setFrom(to);
+    setTo(from);
+    setConvertedAmount(amount);
+    setAmount(convertedAmount);
+  };
 
   const convert = () => {
-    setConvertedAmount(amount * currencyInfo[to])
-  }
+    setConvertedAmount(amount * currencyInfo[to]);
+  };
 
   return (
     <>
@@ -52,7 +50,7 @@ function App() {
                   label="From"
                   amount={amount}
                   currencyOptions={options}
-                  onCurrencyChange={(currency) => setAmount(amount)}
+                  onCurrencyChange={(currency) => setFrom(currency)}
                   selectCurrency={from}
                   onAmountChange={(amount) => setAmount(amount)}
                 />
@@ -72,10 +70,11 @@ function App() {
               <InputBox 
                     label="To"
                     amount={convertedAmount}
-                    currencyOptions={options}
+                    currencyOptions={options.filter(option => option !== from)} // Filter out selected "From" currency
                     onCurrencyChange={(currency) => setTo(currency)}
-                    selectCurrency={from}
+                    selectCurrency={to}
                     amountDisable
+                    currencyDisable
                 />
             </div>
             <button type='submit' className='w-full text-white px-4 py-3 rounded-lg bg-blue-700'>
