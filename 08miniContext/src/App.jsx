@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import './App.css'
+
 import UserContextProvider from './context/UserContextProvider.jsx'
 import Login from './components/Login.jsx'
 import Profile from './components/Profile.jsx'
