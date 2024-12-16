@@ -41,9 +41,13 @@ export class AuthService {
         try {
             return await this.account.get();
         } catch (error) {
-            console.log("Appwrite service :: getCurrentUser :: error", error);
+            if (error.code === 401) {
+                // Handle unauthorized access
+                console.log("User is not authenticated.");
+            } else {
+                console.log("appwriteService :: getCurrentUser :: error", error);
+            }
         }
-
         return null;
     }
 
@@ -51,7 +55,7 @@ export class AuthService {
         try {
             await this.account.deleteSessions();
         } catch (error) {
-            console.log("Appwrite service :: logout :: error", error);
+            console.log("appwriteService :: logout :: error", error);
         }
     }
 }

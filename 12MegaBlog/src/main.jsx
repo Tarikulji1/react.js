@@ -6,7 +6,7 @@ import ReactDOM from "react-dom/client";
 import { Provider } from 'react-redux';
 import store from './store/store.js';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { AuthLayout, Login, Post, Signup } from './components/index.js';
+import { AuthLayout, Login, Post, Signup, Home, AllPosts, AddPost, EditePost } from './components/index.js';
 
 const router = createBrowserRouter([
   {
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication>
             {" "}
-            <EditPost />
+            <EditePost />
           </AuthLayout>
         ),
       },

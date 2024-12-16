@@ -6,10 +6,18 @@ import LogoutBtn from "./Header/LogoutBtn";
 import RTE from "./RTE";
 import Signup from "./Signup";
 import Login from "./Login";
-import Post from "./Post";
+import Post from "../pages/Post";
 import PostForm from "./post-form/PostForm";
 import PostCard from "./PostCard";
 import AuthLayout from "./AuthLayout";
+import Button from "./Button";
+import Input from "./Input";
+import Select from "./Select";
+import Home from "../pages/Home";
+import AllPosts from "../pages/AllPosts";
+import AddPost from "../pages/AddPost";
+import EditePost from "../pages/EditPost";
+
 
 
 export {
@@ -25,5 +33,12 @@ export {
     PostForm,
     PostCard,
     AuthLayout,
+    Button,
+    Input,
+    Select,
+    Home,
+    AllPosts,
+    AddPost,
+    EditePost,
     
 }
