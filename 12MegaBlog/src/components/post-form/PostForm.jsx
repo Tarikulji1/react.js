@@ -21,62 +21,64 @@ function PostForm({post}) {
   const userData = useSelector(state => state.user.userData)
 
   const submit = async (data) => {
-    if (post) {
-      const file = data.image[0] ? appwriteService.uploadFile(data.image[0]) : null
-
-      if (file) {
-        appwriteService.deleteFile(post.featuredImage)
+    try {
+      let file;
+      if (data.image && data.image[0]) {
+        file = await appwriteService.uploadFile(data.image[0]);
       }
 
-      const dbPost = await appwriteService.updatePost(post.$id, {
-        ...data,
-        featuredImage: file ? file.$id : undefined,
-
-        if (dbPost) {
-          navigate(`/post/${dbPost.$id}`)
+      if (post) {
+        if (file) {
+          await appwriteService.deleteFile(post.featuredImage);
         }
-      })
-    } else {
-      const file = await appwriteService.uploadFile(data.image[0]);
-
-      if (file) {
-        const fileId = file.$id
-        data.featuredImage = fileId
+  
+        const dbPost = await appwriteService.updatePost(post.$id, {
+          ...data,
+          featuredImage: file ? file.$id : post.featuredImage,
+        });
+        
+        if (dbPost) {
+            navigate(`/post/${dbPost.$id}`);
+          }
+      } else {
+        const fileId = file ? file.$id : null;
         const dbPost = await appwriteService.createPost({
           ...data,
           userId: userData.$id,
-
-        })
+          featuredImage: fileId,
+        });
+        
         if (dbPost) {
-          navigate(`/post/${dbPost.$id}`)
-        }
-      }
+            navigate(`/post/${dbPost.$id}`);
+          }
+        }     
+    } catch (error) {
+      console.error("PostForm :: submit :: error", error);
     }
-  }
+  };
 
   const slugTransform = useCallback((value) => {
     if (value && typeof value === 'string')
       return value
       .trim()
-      .toLocaleLowerCase()
+      .toLowerCase()
       .replace(/^[a-zA-Z\d\s]+/g, '-')
       .replace(/\s/g, '-')
     
-      return ''
-  }, [])
+      return '';
+  }, []);
 
   React.useEffect(() => {
     const subscription = watch((value, {name}) => {
       if (name === 'title') {
-        setValue('slug', slugTransform(value.title, {shouldValidate: true}))
+        setValue('slug', slugTransform(value.title), {shouldValidate: true})
       }
-    })
+    });
 
     return () => {
       subscription.unsubscribe()
-    }
-
-  }, [watch, slugTransform, setValue])
+    };
+  }, [watch, slugTransform, setValue]);
 
   return (
     <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
@@ -106,7 +108,7 @@ function PostForm({post}) {
           accept="image/png, image/jpg, image/jpeg, image/gif"
           {...register("image", { required: !post })}
         />
-        {post && (
+        {post && post.featuredImage && (
           <div className="w-full mb-4">
             <img 
               src={appwriteService.getFilePreview(post.featuredImage)}

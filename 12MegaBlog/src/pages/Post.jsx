@@ -10,28 +10,52 @@ export default function Post() {
   const [post, setPost] = useState(null);
   const { slug } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);  
 
   const userData = useSelector((state) => state.auth.userData);
 
   const isAuthor = post && userData ? post.userId === userData.$id : false;
 
   useEffect(() => {
-    if (slug) {
-      appwriteService.getPost(slug).then((post) => {
-        if (post) setPost(post);
-        else navigate("/");
-      });
-    } else navigate("/");
+    const fetchPost = async () => {
+      try {
+        if (slug) {
+          const post = await appwriteService.getPost(slug);
+          if (post) {
+            setPost(post);
+            } else {
+              setError("Post not found");
+              navigate("/");
+            }
+          } else {
+            navigate("/");
+          }
+      } catch (error) {
+        console.error("Failed to fetch post: ", error); 
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchPost();
   }, [slug, navigate]);
 
-  const deletePost = () => {
-    appwriteService.deletePost(post.$id).then((status) => {
+  const deletePost = async () => {
+    try {
+      const status = await appwriteService.deletePost(post.$id);
       if (status) {
-        appwriteService.deleteFile(post.featuredImage);
+        await appwriteService.deleteFile(post.featuredImage);
         navigate("/");
       }
-    });
+    } catch (error) {
+      console.error("Failed to delete post: ", error); 
+      setError(error.message);
+    }
   };
+
+  if (loading) return <div>Loading...</div>; 
+  if (error) return <div>Error: {error}</div>;
 
   return post ?  (
     <div className='py-8'>

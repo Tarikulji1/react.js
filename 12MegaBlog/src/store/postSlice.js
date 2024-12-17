@@ -32,6 +32,12 @@ const postSlice = createSlice({
     }
 });
 
+// Export the actions
 export const { addPost, updatePost, deletePost } = postSlice.actions;
 
+// Selector functions to access posts state
+export const selectPosts = (state) => state.posts.posts;
+export const selectPostById = (state, id) => state.posts.posts.find((post) => post.id === id);
+
+// Export the reducer
 export default postSlice.reducer;

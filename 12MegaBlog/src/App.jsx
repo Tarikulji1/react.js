@@ -5,25 +5,28 @@ import authService from './appwrite/auth';
 import { login, logout } from "./store/authSlice";
 import { Footer, Header} from './components'
 import { Outlet } from "react-router-dom";
+import AuthComponent from './components/AuthComponent';
+
 
 function App() {
-  // console.log(process.env.REACT_APP_APPWRITE_URL); // This is create React
-  // console.log(import.meta.env.VITE_APPWRITE_URL); // This is create Vite
-
   const [loading, setLoading] = useState(true);
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   
   useEffect(() => {
     authService.getCurrentUser()
     .then((userData) => {
       if (userData) {
-        dispatch(login({userData}))
+        dispatch(login({userData}));
       } else {
-        dispatch(logout())
+        dispatch(logout());
       }
     })
-    .finally(() => setLoading(false))
-  }, [])
+    .catch((error) => {
+      console.error("Failed to get current user:", error);
+      dispatch(logout());
+    })
+    .finally(() => setLoading(false));
+  }, [dispatch]);
 
   return !loading ? (
     <>
@@ -31,13 +34,16 @@ function App() {
         <div className='w-full block'>
           <Header />
           <main>
-            TODO: {/* <Outlet /> */}
+            <Outlet />
+            <div>
+              <AuthComponent />
+            </div>
           </main>
           <Footer />
         </div>
       </div>
     </>
-  ) : null
+  ) : null;
 }
 
-export default App
+export default App;

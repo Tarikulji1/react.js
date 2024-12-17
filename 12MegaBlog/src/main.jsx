@@ -6,7 +6,14 @@ import ReactDOM from "react-dom/client";
 import { Provider } from 'react-redux';
 import store from './store/store.js';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { AuthLayout, Login, Post, Signup, Home, AllPosts, AddPost, EditePost } from './components/index.js';
+import { AuthLayout, Login } from './components/index.js';
+
+import AddPost from "./pages/AddPost.jsx";
+import AllPosts from "./pages/AllPosts.jsx";
+import EditPost from "./pages/EditPost.jsx";
+import Post from "./pages/Post.jsx";
+import Home from "./pages/Home.jsx";
+import Signup from "./pages/Signup.jsx";
 
 const router = createBrowserRouter([
   {
@@ -56,7 +63,7 @@ const router = createBrowserRouter([
         element: (
           <AuthLayout authentication>
             {" "}
-            <EditePost />
+            <EditPost />
           </AuthLayout>
         ),
       },

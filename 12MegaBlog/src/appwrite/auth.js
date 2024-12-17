@@ -13,25 +13,30 @@ export class AuthService {
     }
 
 
-    async createAccount({email, password, name}) {
+    async createAccount({ email, password, name }) {
         try {
-            const userAccount = await this.account.create(ID.unique(), email, password, name)
+            console.log("Creating account with email:", email);
+            const userAccount = await this.account.create(ID.unique(), email, password, name);
+            console.log("Account created:", userAccount);
             if (userAccount) {
-                // call another method
-                return this.login({email, password});
+                return this.login({ email, password });
             } else {
                 return userAccount;
             }
         } catch (error) {
+            console.error('createAccount error:', error);
             throw error;
         }
     }
 
 
-    async login({email, password}) {
+    async login({ email, password }) {
         try {
-            await this.account.createEmailPasswordSession(email, password);
+            const session = await this.account.createEmailPasswordSession(email, password);
+            console.log('Session created:', session);
+            return session;
         } catch (error) {
+            console.error('Login error:', error);
             throw error;
         }
     }
@@ -39,21 +44,23 @@ export class AuthService {
 
     async getCurrentUser(){
         try {
-            return await this.account.get();
+            const user = await this.account.get();
+            console.log('Current user:', user);
+            return user;
         } catch (error) {
             if (error.code === 401) {
-                // Handle unauthorized access
                 console.log("User is not authenticated.");
             } else {
-                console.log("appwriteService :: getCurrentUser :: error", error);
+                console.error("appwriteService :: getCurrentUser :: error", error);
             }
+            return null;
         }
-        return null;
     }
 
     async logout() {
         try {
             await this.account.deleteSessions();
+            console.log("User logged out successfully.");            
         } catch (error) {
             console.log("appwriteService :: logout :: error", error);
         }
@@ -61,6 +68,4 @@ export class AuthService {
 }
 
 const authService = new AuthService();
-
-
 export default authService;

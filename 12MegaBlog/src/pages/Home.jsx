@@ -3,15 +3,29 @@ import appwriteService from "../appwrite/config";
 import { Container, PostCard } from '../components';
 
 function Home() {
-    const [posts, setPosts] = useState([])
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     
     useEffect(() => {
-        appwriteService.getPosts().then((posts) => {
-            if (posts) {
-                setPosts(posts.documents)
+        const fetchPosts = async () => {
+            try {
+                const posts = await appwriteService.getPosts();
+                if (posts) {
+                    setPosts(posts.documents);
+                }                
+            } catch (error) {
+                console.error("Failed to fetch posts: ", error);
+                setError(error.message);
+            } finally {
+                setLoading(false);
             }
-        })
-    }, [])
+        };
+        fetchPosts();
+    }, []);
+
+    if (loading) return <div>Loading...</div>; 
+    if (error) return <div>Error: {error}</div>;
  
     if (posts.length === 0) {
         return (
@@ -43,4 +57,4 @@ function Home() {
     )
 }
 
-export default Home
+export default Home;
