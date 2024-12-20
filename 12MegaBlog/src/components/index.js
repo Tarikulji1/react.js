@@ -12,8 +12,6 @@ import PostCard from "./PostCard";
 import AuthLayout from "./AuthLayout";
 import Input from "./Input";
 import Select from "./Select";
-
-
 export {
     Header,
     Footer,

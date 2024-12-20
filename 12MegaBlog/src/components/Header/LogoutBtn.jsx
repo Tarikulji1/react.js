@@ -7,8 +7,9 @@ function LogoutBtn() {
     const dispatch = useDispatch();
     const logoutHandler = async () => {
       try {
-          await authService.logout();
-          dispatch(logout());
+          await authService.logout().then(() => {
+            dispatch(logout());
+          })
         } catch (error) {
         console.log("Logout failed :", error);
       }

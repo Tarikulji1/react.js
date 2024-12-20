@@ -67,7 +67,7 @@ function Signup() {
                             {...register("email", {
                                 required: true,
                                 validate: {
-                                    matchPattern: (value) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+                                    matchPatern: (value) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
                                         .test(value) || "Email address must be a valid address",
                                 }
                             })}
@@ -79,7 +79,7 @@ function Signup() {
                             {...register("password", {
                                 required: true,
                                 validate: {
-                                    matchPattern: (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
+                                    matchPatern: (value) => /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/
                                         .test(value) || "Password must be valid",
                                 }
                             })}

@@ -51,7 +51,7 @@ export class AuthService {
             if (error.code === 401) {
                 console.log("User is not authenticated.");
             } else {
-                console.error("appwriteService :: getCurrentUser :: error", error);
+                console.error("Appwrite Service :: getCurrentUser :: error", error);
             }
             return null;
         }
@@ -62,7 +62,7 @@ export class AuthService {
             await this.account.deleteSessions();
             console.log("User logged out successfully.");            
         } catch (error) {
-            console.log("appwriteService :: logout :: error", error);
+            console.log("Appwrite Service :: logout :: error", error);
         }
     }
 }
