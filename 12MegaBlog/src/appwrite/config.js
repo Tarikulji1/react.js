@@ -15,23 +15,25 @@ export class Service {
     }
 
     // post service
-
-    async createPost({ title, slug, content, featuredImage, status, userId }) {
+    async createPost({title, slug, content, featuredImage, status, userId}){
         try {
+            const documentId = ID.unique();
+            const data = {
+                title,
+                slug,
+                content,
+                featuredImage,
+                status,
+                userId
+            }
             return await this.databases.createDocument(
                 conf.appwriteDatabaseId,
                 conf.appwriteCollectionId,
-                slug,
-                {
-                    title,
-                    content,
-                    featuredImage,
-                    status,
-                    userId,
-                }
-            );
+                documentId,
+                data,
+            )
         } catch (error) {
-            console.error("Appwrite service :: createPost :: error", error);
+            console.log("Appwrite serive :: createPost :: error", error);
             return null;
         }
     }
